@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import './widgets/register.dart';
-import 'models/users.dart';
+
+import './screens/login_screen.dart';
+import './screens/register_screen.dart';
+import './models/users.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,12 +17,39 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Home',
       theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(
-          secondary: const Color(0x00ffcc9c),
+        primaryColor: Colors.pink,
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          secondary: Colors.amber,
         ),
+        canvasColor: const Color.fromRGBO(255, 254, 229, 1),
+        fontFamily: 'Raleway',
+        textTheme: ThemeData.light().textTheme.copyWith(
+              // bodyText1: TextStyle(
+              //   color: Color.fromRGBO(20, 51, 51, 1),
+              // ),
+              // bodyText2: TextStyle(
+              //   color: Color.fromRGBO(20, 51, 51, 1),
+              // ),
+              bodySmall: const TextStyle(
+                color: Color.fromRGBO(20, 51, 51, 1),
+              ),
+              bodyMedium: const TextStyle(
+                color: Color.fromRGBO(20, 51, 51, 1),
+              ),
+              titleSmall: const TextStyle(
+                fontFamily: 'RobotoCondensed',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
       ),
-      home: const MyHomePage(),
+      
+      // home: MyHomePage(),
+      routes: {
+        '/': (ctx) => const MyHomePage(),
+        // RegisterScreen.routeName: (ctx) => RegisterScreen(),
+        LoginScreen.routeName: (ctx) => LoginScreen(),
+      },
     );
   }
 }
@@ -35,7 +64,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Users> users = [];
 
-  void _addNewUser(String username, String password) {
+  void addNewUser(String username, String password) {
     // ignore: unused_local_variable
     final newUser = Users(username, password);
     setState(() {
@@ -45,6 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Register(_addNewUser);
+    return RegisterScreen(addNewUser);
   }
 }

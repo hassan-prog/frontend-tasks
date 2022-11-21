@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
+
 import 'register_screen.dart';
+import '../models/users.dart';
+import '../main.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login-screen';
+  final List<Users> myUsers;
+
+  LoginScreen(this.myUsers, {super.key});
 
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void onLogin() {
-    if (_passwordController.text.isEmpty || _usernameController.text.isEmpty) {
+  void onLogin(BuildContext ctx) {
+    var enteredUsername = _usernameController.text;
+    var enteredPassword = _passwordController.text;
+
+    if (enteredPassword.isEmpty || enteredUsername.isEmpty) {
       return;
     }
-    final enteredUsername = _usernameController.text;
-    final enteredPassword = _passwordController.text;
+
+      // Navigator.of(ctx)
+      //     .push(MaterialPageRoute(builder: (ctx) => const MyHomePage()));
   }
 
   void handleRegister(BuildContext ctx) {
+    Navigator.of(ctx).pushNamed(RegisterScreen.routeName, arguments: {});
   }
 
   @override
@@ -41,12 +52,13 @@ class LoginScreen extends StatelessWidget {
                     TextField(
                       decoration: const InputDecoration(labelText: 'Username'),
                       controller: _usernameController,
-                      onSubmitted: (_) => onLogin(),
+                      onSubmitted: (_) => onLogin(context),
                     ),
                     TextField(
                       decoration: const InputDecoration(labelText: 'Password'),
+                      obscureText: true,
                       controller: _passwordController,
-                      onSubmitted: (_) => onLogin(),
+                      onSubmitted: (_) => onLogin(context),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -71,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                               TextButton(
-                                onPressed: onLogin,
+                                onPressed: () => onLogin(context),
                                 child: const Text(
                                   'Sign in',
                                   style: TextStyle(

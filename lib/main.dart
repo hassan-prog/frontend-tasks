@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './screens/login_screen.dart';
 import './screens/register_screen.dart';
 import './models/users.dart';
+import './widgets/new_user.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,12 +44,12 @@ class MyApp extends StatelessWidget {
               ),
             ),
       ),
-      
+
       // home: MyHomePage(),
       routes: {
         '/': (ctx) => const MyHomePage(),
         // RegisterScreen.routeName: (ctx) => RegisterScreen(),
-        LoginScreen.routeName: (ctx) => LoginScreen(),
+        // LoginScreen.routeName: (ctx) => LoginScreen(),
       },
     );
   }
@@ -62,9 +63,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Users> users = [];
+  final List<Users> users = [
+    Users('Hassan', 'asdasd'),
+    Users('Mohamed', 'dsadsa'),
+    Users('Ahmed', '123123'),
+    Users('Ali', '321321'),
+  ];
 
-  void addNewUser(String username, String password) {
+  void _addNewUser(String username, String password) {
     // ignore: unused_local_variable
     final newUser = Users(username, password);
     setState(() {
@@ -72,8 +78,122 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _dltUser(int index) {
+    setState(() {
+      users.remove(users[index]);
+    });
+  }
+
+  void showPassword() {}
+
+  void _showAddNewUser(BuildContext ctx) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (_) {
+        return NewUser(_addNewUser);
+      },
+    );
+  }
+
+  void logout(BuildContext ctx) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (ctx) => LoginScreen(users)));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return RegisterScreen(addNewUser);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Test'),
+        actions: [
+          TextButton(
+            onPressed: () => {logout(context)},
+            child: const Text(
+              'Logout',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          )
+          // IconButton(
+          //   icon: const Icon(Icons.add),
+          //   onPressed: () {
+          //     _showAddNewUser(context);
+          //   },
+          // )
+        ],
+      ),
+      body: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Users: ',
+                  style: TextStyle(
+                    fontSize: 24,
+                  ),
+                ),
+                Text(
+                  '${users.length}',
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: (MediaQuery.of(context).size.height -
+                    AppBar().preferredSize.height -
+                    MediaQuery.of(context).padding.top) *
+                0.9,
+            child: ListView.builder(
+              itemBuilder: (context, index) => Card(
+                elevation: 4,
+                margin: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 5,
+                ),
+                child: ListTile(
+                  leading: const CircleAvatar(
+                    radius: 30,
+                    child: Padding(
+                      padding: EdgeInsets.all(6),
+                      child: FittedBox(
+                        child: Icon(
+                          Icons.account_circle_rounded,
+                          size: 36,
+                        ),
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    users[index].username,
+                  ),
+                  subtitle: Text(
+                    users[index].password,
+                  ),
+                  trailing: IconButton(
+                    onPressed: () => {_dltUser(index)},
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ),
+              itemCount: users.length,
+            ),
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddNewUser(context),
+        backgroundColor: Theme.of(context).primaryColor,
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }

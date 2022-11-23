@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../models/users.dart';
 
 class NewUser extends StatefulWidget {
-  final Function addUser;
+  final List myUsers;
 
-  NewUser(this.addUser, {super.key});
+  NewUser(this.myUsers, {super.key});
 
   @override
   State<NewUser> createState() => _NewUserState();
@@ -30,8 +30,9 @@ class _NewUserState extends State<NewUser> {
     if (enteredUsername.isEmpty || enteredPassword.isEmpty) {
       return;
     }
+    var newUserObject = Users(enteredUsername, enteredPassword);
 
-    widget.addUser(enteredUsername, enteredPassword);
+    widget.myUsers.add(newUserObject);
     Navigator.of(context).pop();
   }
 

@@ -1,35 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_task/main.dart';
 
 import 'login_screen.dart';
+import '../models/users.dart';
 
+// ignore: use_key_in_widget_constructors
 class RegisterScreen extends StatelessWidget {
   static const String routeName = '/register-screen';
-
-  final Function addUser;
 
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  RegisterScreen(this.addUser, {super.key});
-
-  void onRegister() {
+  void onRegister(BuildContext ctx, List myUsers) {
     if (_passwordController.text.isEmpty || _usernameController.text.isEmpty) {
       return;
     }
     final enteredUsername = _usernameController.text;
     final enteredPassword = _passwordController.text;
 
-    addUser(enteredUsername, enteredPassword);
+    var newUser = Users(enteredUsername, enteredPassword);
+    myUsers.add(newUser);
+
+    Navigator.of(ctx).pushNamed(LoginScreen.routeName, arguments: myUsers);
   }
 
-  void handleLogin(BuildContext ctx) {
-    Navigator.of(ctx).pushNamed(LoginScreen.routeName, arguments: {});
+  void handleLogin(BuildContext ctx, List myUsers) {
+    Navigator.of(ctx).pushNamed(LoginScreen.routeName, arguments: myUsers);
   }
 
   @override
   Widget build(BuildContext context) {
-    // final routeArgs =
-    //     ModalRoute.of(context)?.settings.arguments as Function;
+    final myUsers = ModalRoute.of(context)?.settings.arguments as List;
 
     return MaterialApp(
       home: Scaffold(
@@ -52,12 +53,13 @@ class RegisterScreen extends StatelessWidget {
                     TextField(
                       decoration: const InputDecoration(labelText: 'Username'),
                       controller: _usernameController,
-                      onSubmitted: (_) => onRegister(),
+                      onSubmitted: (_) => onRegister(context, myUsers),
                     ),
                     TextField(
                       decoration: const InputDecoration(labelText: 'Password'),
                       controller: _passwordController,
-                      onSubmitted: (_) => onRegister(),
+                      onSubmitted: (_) => onRegister(context, myUsers),
+                      obscureText: true,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -73,7 +75,7 @@ class RegisterScreen extends StatelessWidget {
                                 ),
                               ),
                               TextButton(
-                                onPressed: () => handleLogin(context),
+                                onPressed: () => handleLogin(context, myUsers),
                                 child: const Text(
                                   'Sign in',
                                   style: TextStyle(
@@ -82,7 +84,7 @@ class RegisterScreen extends StatelessWidget {
                                 ),
                               ),
                               TextButton(
-                                onPressed: onRegister,
+                                onPressed: () => onRegister(context, myUsers),
                                 child: const Text(
                                   'Sign up',
                                   style: TextStyle(

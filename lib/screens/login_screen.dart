@@ -6,14 +6,27 @@ import '../main.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login-screen';
-  final List<Users> myUsers;
 
-  LoginScreen(this.myUsers, {super.key});
+  final List<Users> users = [
+    Users('Hassan', 'asdasd'),
+    Users('Mohamed', 'dsadsa'),
+    Users('Ahmed', '123123'),
+    Users('Ali', '321321'),
+  ];
+
+  LoginScreen({super.key});
 
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   void onLogin(BuildContext ctx) {
+    final newUsersList = ModalRoute.of(ctx)!.settings.arguments as List;
+    List lastList;
+    if (newUsersList.isEmpty) {
+      lastList = users;
+    } else {
+      lastList = newUsersList + users;
+    }
     var enteredUsername = _usernameController.text;
     var enteredPassword = _passwordController.text;
 
@@ -21,12 +34,20 @@ class LoginScreen extends StatelessWidget {
       return;
     }
 
-      // Navigator.of(ctx)
-      //     .push(MaterialPageRoute(builder: (ctx) => const MyHomePage()));
+    for (int i = 0; i < lastList.length; i++) {
+      if (enteredUsername == lastList[i].username) {
+        if (enteredPassword == lastList[i].password) {
+          Navigator.of(ctx)
+              .pushNamed(MyHomePage.homeRoute, arguments: newUsersList);
+        }
+      } else {
+        return;
+      }
+    }
   }
 
   void handleRegister(BuildContext ctx) {
-    Navigator.of(ctx).pushNamed(RegisterScreen.routeName, arguments: {});
+    Navigator.of(ctx).pushNamed(RegisterScreen.routeName, arguments: users);
   }
 
   @override

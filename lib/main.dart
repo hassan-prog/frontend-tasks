@@ -47,15 +47,17 @@ class MyApp extends StatelessWidget {
 
       // home: MyHomePage(),
       routes: {
-        '/': (ctx) => const MyHomePage(),
-        // RegisterScreen.routeName: (ctx) => RegisterScreen(),
-        // LoginScreen.routeName: (ctx) => LoginScreen(),
+        '/': (ctx) => LoginScreen(),
+        MyHomePage.homeRoute: (ctx) => const MyHomePage(),
+        LoginScreen.routeName: (ctx) => LoginScreen(),
+        RegisterScreen.routeName: (ctx) => RegisterScreen(),
       },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  static const homeRoute = '/myhomepage';
   const MyHomePage({super.key});
 
   @override
@@ -63,45 +65,36 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Users> users = [
-    Users('Hassan', 'asdasd'),
-    Users('Mohamed', 'dsadsa'),
-    Users('Ahmed', '123123'),
-    Users('Ali', '321321'),
-  ];
-
-  void _addNewUser(String username, String password) {
-    // ignore: unused_local_variable
-    final newUser = Users(username, password);
-    setState(() {
-      users.add(newUser);
-    });
+    
+void _showAddNewUser(BuildContext ctx, List myUsers) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (_) {
+        return NewUser(myUsers);
+      },
+    );
   }
+  
 
-  void _dltUser(int index) {
+  void _dltUser(int index, List myUsers) {
     setState(() {
-      users.remove(users[index]);
+      myUsers.remove(myUsers[index]);
     });
   }
 
   void showPassword() {}
 
-  void _showAddNewUser(BuildContext ctx) {
-    showModalBottomSheet(
-      context: ctx,
-      builder: (_) {
-        return NewUser(_addNewUser);
-      },
-    );
-  }
+  
 
   void logout(BuildContext ctx) {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (ctx) => LoginScreen(users)));
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (ctx) => LoginScreen()));
   }
 
   @override
   Widget build(BuildContext context) {
+    final myUsers = ModalRoute.of(context)?.settings.arguments as List;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Test'),
@@ -135,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 Text(
-                  '${users.length}',
+                  '${myUsers.length}',
                   style: const TextStyle(
                     fontSize: 20,
                   ),
@@ -169,13 +162,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   title: Text(
-                    users[index].username,
+                    myUsers[index].username,
                   ),
                   subtitle: Text(
-                    users[index].password,
+                    myUsers[index].password,
                   ),
                   trailing: IconButton(
-                    onPressed: () => {_dltUser(index)},
+                    onPressed: () => _dltUser(index, myUsers),
                     icon: const Icon(
                       Icons.delete,
                       color: Colors.red,
@@ -183,14 +176,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              itemCount: users.length,
+              itemCount: myUsers.length,
             ),
           ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddNewUser(context),
+        onPressed: () => _showAddNewUser(context, myUsers),
         backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
       ),

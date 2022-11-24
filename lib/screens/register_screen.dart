@@ -12,11 +12,11 @@ class RegisterScreen extends StatelessWidget {
   final _passwordController = TextEditingController();
 
   void onRegister(BuildContext ctx, List myUsers) {
-    if (_passwordController.text.isEmpty || _usernameController.text.isEmpty) {
-      return;
-    }
     final enteredUsername = _usernameController.text;
     final enteredPassword = _passwordController.text;
+    if (enteredUsername.isEmpty || enteredPassword.isEmpty) {
+      return;
+    }
 
     var newUser = Users(enteredUsername, enteredPassword);
     myUsers.add(newUser);

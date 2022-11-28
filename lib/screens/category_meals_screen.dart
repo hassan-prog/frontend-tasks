@@ -1,8 +1,8 @@
 //The screen after pressing a category name
 
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/widgets/meal_item.dart';
 
+import '../widgets/meal_item.dart';
 import '../dummy_data.dart';
 
 class CategoryMealsScreen extends StatelessWidget {
@@ -12,8 +12,8 @@ class CategoryMealsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final routeArgs = ModalRoute.of(context)?.settings.arguments
         as Map<String, String>; //arguments from category_item class
-    final categoryTitle = routeArgs['title'];
     final categoryId = routeArgs['id'];
+    final categoryTitle = routeArgs['title'];
     final categoryMeals = DUMMY_MEALS.where((meal) {
       return meal.categories.contains(categoryId);
     }).toList(); //returns a list of category meals

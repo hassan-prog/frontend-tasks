@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:test/main.dart';
-import 'package:test/register.dart';
 
-import 'models/users.dart';
+import './register.dart';
+import './main.dart';
+
+import './models/users.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
 // كنت بجرب حوار ال Navigation ده بس ضرب مني مش عارف  ليه وعمال يديني exception غريب كده
 //ممكن لما نقعد مع بعض نضبط الدنيا
   void selectPage(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return MyHomePage();
-    }));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return MyHomePage();
+        },
+      ),
+    );
   }
 
 // كنت بجرب حوار انه يتcheck للي بيعمل login بس برضه ضرب
   void checkLogin(BuildContext context) {
     // مش لاقي رقم احطه ف حطيت 7
     var x = Users(
-        id: 7, name: nameController.text, password: passwordController.text);
+        id: 0, name: nameController.text, password: passwordController.text);
     for (var i in users) {
       if (x.name != i.name && x.password != i.password) {
         print(x);
@@ -58,9 +63,9 @@ class Login extends StatelessWidget {
                     ),
                     controller: passwordController,
                   ),
-                  const TextButton(
-                    onPressed: null,
-                    child: Text('Don\'t have an account?'),
+                  TextButton(
+                    onPressed: () => selectPage(context),
+                    child: const Text('Don\'t have an account?'),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(25),

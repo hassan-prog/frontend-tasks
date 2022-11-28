@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:test/login.dart';
+import 'login.dart';
 //import 'package:test/login.dart';
-import 'package:test/register.dart';
+import './register.dart';
 
-import 'models/users.dart';
+import './models/users.dart';
 
 void main() => runApp(Login());
 // A List of Current Users
@@ -54,6 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final enteredName = nameController.text;
     final enteredPassword = passwordController.text;
     addUser(users.length, enteredName, enteredPassword);
+    Navigator.of(context).pop();
   }
 
   //method to delete a user that is activated when pressing on trash Icon:

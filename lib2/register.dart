@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:test/login.dart';
-import 'package:test/main.dart';
+import 'login.dart';
+import 'main.dart';
 
-import 'models/users.dart';
+import './models/users.dart';
 
 class Register extends StatelessWidget {
   void addUser(int id, String name, String password) {

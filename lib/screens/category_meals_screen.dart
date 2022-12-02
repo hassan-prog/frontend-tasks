@@ -20,6 +20,8 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
 
   @override
   void didChangeDependencies() {
+    // initState is used to load data before build runs but here we use this hook
+    // because we need to use the context and this hook can access the context before building
     if (!loadedInitData) {
       final routeArgs = ModalRoute.of(context)?.settings.arguments
           as Map<String, String>; //arguments from category_item class
@@ -44,7 +46,7 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          categoryTitle!,
+          categoryTitle,
         ),
         backgroundColor: Theme.of(context).primaryColor,
       ),

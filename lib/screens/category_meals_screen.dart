@@ -1,13 +1,15 @@
 //The screen after pressing a category name
 
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/models/meal.dart';
 
+import '../models/meal.dart';
 import '../widgets/meal_item.dart';
-import '../dummy_data.dart';
 
 class CategoryMealsScreen extends StatefulWidget {
   static const routeName = '/categories-meals'; //to avoid name misstype
+  final List<Meal> availableMeals;
+
+  CategoryMealsScreen(this.availableMeals);
 
   @override
   State<CategoryMealsScreen> createState() => _CategoryMealsScreenState();
@@ -27,7 +29,7 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
           as Map<String, String>; //arguments from category_item class
       final categoryId = routeArgs['id'];
       categoryTitle = routeArgs['title']!;
-      displayedMeals = DUMMY_MEALS.where((meal) {
+      displayedMeals = widget.availableMeals.where((meal) {
         return meal.categories.contains(categoryId);
       }).toList(); //returns a list of category meals
       loadedInitData = true;
